@@ -41,7 +41,7 @@ public class Weapon : MonoBehaviour
             _canShoot = false;
             GameObject aBullet = Instantiate(bullet, transform.position, Quaternion.identity);
             float posY = aBullet.transform.position.y;
-            aBullet.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+           // aBullet.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
 
             aBullet.GetComponent<BulletPlayer>().Shoot(FindDirection());
             aBullet.GetComponent<BulletPlayer>().damage = damage;

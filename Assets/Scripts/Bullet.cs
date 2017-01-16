@@ -31,7 +31,7 @@ public class Bullet : MonoBehaviour {
     {
 
         Entity e = other.GetComponent<Entity>();
-        if(e.type == possibleTarget)
+        if(e && e.type == possibleTarget)
         {
             e.takeDamage(bulletParams.bulletDamage);
             Destroy(this.gameObject);
