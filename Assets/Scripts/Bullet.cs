@@ -13,6 +13,8 @@ public class Bullet : MonoBehaviour {
 
     public BulletParameters bulletParams;
 
+    public entityType possibleTarget;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -25,6 +27,11 @@ public class Bullet : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        other.GetComponent<Enemy>();
+
+        Entity e = other.GetComponent<Entity>();
+        if(e.type == possibleTarget)
+        {
+            e.takeDamage(bulletParams.bulletDamage);
+        }
     }
 }
