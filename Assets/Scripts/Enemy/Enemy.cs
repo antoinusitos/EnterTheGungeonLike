@@ -28,6 +28,9 @@ public class Enemy : Entity {
 
     public GameObject bulletPrefab;
 
+    public Transform weaponPivot;
+    public SpriteRenderer weaponSprite;
+
     private float attackCooldown = 0f;
 
     // Use this for initialization
@@ -58,12 +61,13 @@ public class Enemy : Entity {
 
     Transform findTarget()
     {
-        return GameObject.FindGameObjectsWithTag("player")[0].transform;
+        return GameObject.FindGameObjectsWithTag("Player")[0].transform;
     }
     
 
     public void moveToTarget()
     {
+        Vector3 dir = (this.tr.position - target.position).normalized;
         float dist = Vector3.Distance(this.tr.position, target.position);
         if (dist < enemyParam.minRangeToPursue)
         {
@@ -75,6 +79,14 @@ public class Enemy : Entity {
             linkedAgent.ResetPath();
         }
         tr.rotation = Quaternion.identity;
+        //Weapon rotation
+        Vector3 euler = Vector3.zero;
+        euler.y = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg % 360f;
+        if(weaponSprite)
+        {
+            weaponSprite.flipY = euler.y < 180f;
+        }
+        weaponPivot.rotation = Quaternion.Euler(euler);
     }
 
     public bool canAttack()
@@ -87,7 +99,8 @@ public class Enemy : Entity {
         if (Vector3.Distance(this.tr.position, target.position) < enemyParam.minRangeToAttack) {
             if (canAttack())
             {
-                Instantiate<GameObject>(bulletPrefab, tr.position, tr.rotation);
+                GameObject go = Instantiate<GameObject>(bulletPrefab, tr.position, Quaternion.Euler(90f, 0f, 0f));
+                go.GetComponent<Bullet>().direction = (target.position - this.tr.position).normalized;
                 attackCooldown = enemyParam.attackCooldown;
             }
         }
