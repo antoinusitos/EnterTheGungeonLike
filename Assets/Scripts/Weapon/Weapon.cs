@@ -9,6 +9,7 @@ public class Weapon : MonoBehaviour
     protected float fireRate = 0.5f;
     protected float _currentReload = 0.0f;
     protected bool _canShoot = true;
+    public float damage = 10.0f;
     
 	void Start ()
     {
@@ -43,6 +44,7 @@ public class Weapon : MonoBehaviour
             aBullet.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
 
             aBullet.GetComponent<BulletPlayer>().Shoot(FindDirection());
+            aBullet.GetComponent<BulletPlayer>().damage = damage;
         }
     }
 
