@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -14,16 +15,20 @@ public class EnemyParameters
     public float attackCooldown = 1.5f;
 }
 
-public class Enemy : MonoBehaviour {
+public class Enemy : Entity {
 
     private NavMeshAgent linkedAgent;
 
-    public EnemyParameters enemyParam;
+    public EnemyParameters enemyParam = new EnemyParameters();
 
     public Transform target;
     private Transform tr;
 
     private Animator animator;
+
+    public GameObject bulletPrefab;
+
+    private float attackCooldown = 0f;
 
     // Use this for initialization
     void Awake () {
@@ -43,11 +48,12 @@ public class Enemy : MonoBehaviour {
         moveToTarget();
         attackTarget();
         updateAnimations();
+        updateCooldowns();
 	}
 
     private void updateAnimations()
     {
-       animator.SetBool("moving", linkedAgent.velocity.magnitude > 0.05f);
+       animator.SetBool("moving", linkedAgent.velocity.magnitude > 0.1f);
     }
 
     Transform findTarget()
@@ -66,16 +72,35 @@ public class Enemy : MonoBehaviour {
         if(dist < enemyParam.stopDistance)
         {
             linkedAgent.Stop();
+            linkedAgent.ResetPath();
         }
         tr.rotation = Quaternion.identity;
+    }
+
+    public bool canAttack()
+    {
+        return attackCooldown <= 0f && bulletPrefab != null;
     }
 
     void attackTarget()
     {
         if (Vector3.Distance(this.tr.position, target.position) < enemyParam.minRangeToAttack) {
-            //Attack
-
+            if (canAttack())
+            {
+                Instantiate<GameObject>(bulletPrefab, tr.position, tr.rotation);
+                attackCooldown = enemyParam.attackCooldown;
+            }
         }
+    }
+    
+    private void updateCooldowns()
+    {
+        attackCooldown = Mathf.Max(attackCooldown - Time.deltaTime, 0f);
+    }
+
+    public override void die()
+    {
+        Destroy(this.gameObject);
     }
 
 }
