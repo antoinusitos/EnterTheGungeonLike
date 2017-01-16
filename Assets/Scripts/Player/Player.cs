@@ -15,10 +15,10 @@ public class Player : MonoBehaviour
         _weapon = GetComponent<Weapon>();
         _rigidBody = GetComponent<Rigidbody>();
         _animator = GetComponentInChildren<Animator>();
-        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        _spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
     }
 
-    public void GetNewWeapon(System.Type aType)
+    public void GetNewWeapon(System.Type aType, Sprite s)
     {
         GameObject bullet = _weapon.bullet;
         Destroy(_weapon);
@@ -26,6 +26,8 @@ public class Player : MonoBehaviour
         {
             _weapon = gameObject.AddComponent(aType) as Weapon;
             _weapon.bullet = Resources.Load<GameObject>("Bullet");
+            transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = s;
+            transform.GetChild(2).GetComponent<SpriteRenderer>().sprite = s;
         }
         catch
         {
@@ -74,10 +76,14 @@ public class Player : MonoBehaviour
         if(_weapon.FindDirection().x < 0)
         {
             _spriteRenderer.flipX = true;
+            transform.GetChild(1).gameObject.SetActive(false);
+            transform.GetChild(2).gameObject.SetActive(true);
         }
         else
         {
             _spriteRenderer.flipX = false;
+            transform.GetChild(1).gameObject.SetActive(true);
+            transform.GetChild(2).gameObject.SetActive(false);
         }
 
         dir = dir.normalized;

@@ -19,7 +19,7 @@ public class PickUp : MonoBehaviour
     {
         if(other.tag == "Player")
         {
-            other.GetComponent<Player>().GetNewWeapon(t);
+            other.GetComponent<Player>().GetNewWeapon(t, GetComponentInChildren<SpriteRenderer>().sprite);
             Destroy(gameObject);
         }
     }
