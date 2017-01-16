@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    public float fireRate = 0.5f;
     public GameObject bullet;
 
-    private float _currentReload = 0.0f;
-    private bool _canShoot = true;
+    protected float fireRate = 0.5f;
+    protected float _currentReload = 0.0f;
+    protected bool _canShoot = true;
     
 	void Start ()
     {
 		
 	}
+
+    protected void SetFireRate(float newFireRate)
+    {
+        fireRate = newFireRate;
+    }
 	
 	void Update ()
     {
@@ -28,7 +33,7 @@ public class Weapon : MonoBehaviour
         }
 	}
 
-    public void Shoot()
+    public virtual void Shoot()
     {
         if(_canShoot)
         {
@@ -37,11 +42,11 @@ public class Weapon : MonoBehaviour
             float posY = aBullet.transform.position.y;
             aBullet.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
 
-            aBullet.GetComponent<Bullet>().Shoot(FindDirection());
+            aBullet.GetComponent<BulletPlayer>().Shoot(FindDirection());
         }
     }
 
-    Vector3 FindDirection()
+    public Vector3 FindDirection()
     {
         Vector3 dir = Vector3.zero;
 

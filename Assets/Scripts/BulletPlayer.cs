@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class BulletPlayer : MonoBehaviour
 {
-
+    public float bulletDamage = 1.0f;
     private Vector3 _dir;
     private float _speed = 10.0f;
 
