@@ -15,14 +15,16 @@ public class Bullet : MonoBehaviour {
 
     public entityType possibleTarget;
 
+    public Vector3 direction;
+
 	// Use this for initialization
 	void Start () {
-		
+        Destroy(this.gameObject, 20f);	
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+        this.transform.position += direction * Time.deltaTime * bulletParams.speed;
 	}
 
     private void OnTriggerEnter(Collider other)
@@ -32,6 +34,8 @@ public class Bullet : MonoBehaviour {
         if(e.type == possibleTarget)
         {
             e.takeDamage(bulletParams.bulletDamage);
+            Destroy(this.gameObject);
         }
+
     }
 }
