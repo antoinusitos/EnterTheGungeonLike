@@ -22,8 +22,15 @@ public class Player : MonoBehaviour
     {
         GameObject bullet = _weapon.bullet;
         Destroy(_weapon);
-        _weapon = gameObject.AddComponent(aType) as Weapon;
-        _weapon.bullet = Resources.Load<GameObject>("Bullet");
+        try
+        {
+            _weapon = gameObject.AddComponent(aType) as Weapon;
+            _weapon.bullet = Resources.Load<GameObject>("Bullet");
+        }
+        catch
+        {
+            Debug.Log("it's not a weapon !");
+        }
     }
 
     void Update ()
